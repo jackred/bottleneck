@@ -1,6 +1,8 @@
 use teloxide::prelude::*;
 use teloxide::types;
 
+extern crate chrono;
+use chrono::{DateTime, TimeZone, NaiveDateTime, Utc};
 
 use serde_json::{Result, Value};
 use std::fs::File;
@@ -32,7 +34,7 @@ async fn run() -> Result<()>{
 	    }
 	    _ => String::new()
 	};
-	log::info!("{}: {:?}", msg.date, res);
+	log::info!("{}: {:?}", NaiveDateTime::from_timestamp(msg.date.into(), 0), res);
 	let options = vec![
 	    String::from("Lundi"),
 	    String::from("Mardi"),
