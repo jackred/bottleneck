@@ -20,7 +20,9 @@ enum Command {
     #[command(description = "display this text.")]
     Help,
     #[command(description = "send a poll with all days of the week")]
-    Poll
+    Poll,
+    #[command(description = "check if the bot is alive")]
+    Ping	
 }
 
 async fn answer(
@@ -43,7 +45,8 @@ async fn answer(
 	    let poll = poll.allows_multiple_answers(true);
 	    let poll = poll.is_anonymous(false);
 	    poll.await?;
-	}
+	},
+	Command::Ping => {cx.answer("pong!").await?;}
 	
     };
 
@@ -62,6 +65,8 @@ async fn run() -> serde_json::Result<()>{
     let bot = Bot::new(v["token"].as_str().unwrap()).auto_send();
 
     let bot_name: String = "bot_name".to_string();
+    bot.send_message(v["user"].as_i64().unwrap(), "I'm alive").await;
     teloxide::commands_repl(bot, bot_name, answer).await;
+    
     Ok(())
 }
